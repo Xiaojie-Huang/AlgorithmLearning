@@ -1,0 +1,31 @@
+{
+    "version": "2.0.0",
+    "tasks": [{
+        "label": "Compile",
+        "command": "g++",   
+        "args": [
+            "${file}",
+            "-o",   
+            "${fileDirname}/${fileBasenameNoExtension}.exe",
+            "-g",    
+            "-m64", 
+            "-Wall", 
+            "-static-libgcc",     
+            "-fexec-charset=GBK", 
+            "-D__USE_MINGW_ANSI_STDIO"
+        ],
+        "type": "process", 
+        "group": {
+            "kind": "build",
+            "isDefault": true 
+        },
+        "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,     
+            "panel": "shared"  
+        },
+        "problemMatcher":"$gcc"
+    
+    }]
+}
