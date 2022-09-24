@@ -160,6 +160,74 @@ void QuickSort(vector<int>& array,int start,int end)
 //不稳定
 //堆化方法：根据完全二叉树节点特性：i的左儿子为2i+1，右儿子为2i+2，父节点为i/2
 //下溯方法为核心，恢复堆序的过程就是将影响排序的元素不断向下层移动
+//时间复杂度:O(nlogn) 空间复杂度O（1）
+void adjust(vector<int>& array,int size,int index)
+{
+    int MaxIndex = index;
+    int leftChild = 2 * index + 1;
+    int rightChild = 2 * index + 2;
+
+    if(leftChild < size && array[leftChild] > array[MaxIndex])
+    {
+        MaxIndex = leftChild;
+    }
+    if(rightChild < size && array[rightChild] > array[MaxIndex])
+    {
+        MaxIndex = rightChild;
+    }
+
+    if(MaxIndex != index)
+    {
+        swap(array[index], array[MaxIndex]);
+        adjust(array,size,MaxIndex);
+    }
+
+}
+
+void HeapSort(vector<int>& array)
+{
+    int n = array.size();
+    if(n < 2)
+        return;
+
+    //i要从最后一个非叶子节点开始
+    //建堆，从下往上
+    for (int i = (n - 1 - 1) / 2; i >= 0;--i)
+    {
+        adjust(array, n, i);
+    }
+
+    //大顶堆：把最大的移到最后，然后对剩下的进行调整
+    //从最后一个元素的下标开始往前遍历，每次将堆顶元素交换至当前位置，并且缩小堆长度，从0开始adjust（下溯）
+    for (int i = n - 1; i > 0;--i)
+    {
+        swap(array[i], array[0]);
+        adjust(array, i, 0);
+    }
+}
+
+//还有三类排序这里没有写出，简要提一下
+//1.计数排序（维持一个count数组，下标代表元素）
+//上面我们提到的都是基于比较的排序，而计数排序是基于非比较的排序，通常使用于整数数组，是一种利用整数特点取得线性复杂度的非比较排序方法
+//朴素的方法有两个缺陷：一是负数处理不了，二是如果数据范围比较小，空间冗余
+
+//2.基数排序
+//基是指数的位，按数字的位进行循环，每一轮都是对当前位（基数）的计数排序，使得输出到arr后所有数字在截止到当前位上是排序状态
+
+//3.桶排序
+//将原数组划分为桶的多个区间中，然后对每个桶单独排序，之后再按桶序和桶内序输出结果，适合于分布比较均匀的数据
+
+//总结：
+//稳定的排序：冒泡，插入，归并，计数，基数，桶
+//不稳定的排序：选择，快速，堆
+
+//各排序算法的特性与优劣：
+//1.选择排序：运行时间与输入无关，数据移动是最少的，交换次数与数组大小是线性关系
+//2.插入排序：所需时间取决于输入中元素的初始顺序
+//简单插入排序对排序程度较高的序列有较高的效率。假设初始序列完全排序，每一轮只需要比较1次，会是O（n）的复杂度，冒泡排序和选择排序做不到这一点，仍需要O（n^2）
+//但是简单插入排序每次比较最多将数字移动一位，效率较低
+//希尔排序善于处理大型数组
+
 int main()
 {
     ShellSort(Array_1);
@@ -170,5 +238,8 @@ int main()
 
     QuickSort(Array_3,0,Array_3.size()-1);
     Print(Array_3);
+
+    HeapSort(Array_4);
+    Print(Array_4);
     getchar();
 }
